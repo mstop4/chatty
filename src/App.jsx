@@ -10,11 +10,13 @@ class App extends Component {
       currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [
         {
+          id: 1,
           username: "Bob",
           content: "Has anyone seen my marbles?",
         },
 
         {
+          id: 2,
           username: "Anonymous",
           content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
         }
@@ -22,14 +24,11 @@ class App extends Component {
     }
   }
 
-  componentDidMount() {
-  }
-
   render() {
     return (
       <div>
         <nav className="navbar">
-          <a href="/" class="navbar-brand">Chatty</a>
+          <a href="/" className="navbar-brand">Raccoon Chat</a>
           <img className="raccoon" src="/build/raccoon.jpg"/>
         </nav>
 
