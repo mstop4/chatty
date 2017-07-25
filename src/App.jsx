@@ -22,6 +22,50 @@ class App extends Component {
         }
       ]
     }
+    this.handleTyping = this.handleTyping.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    console.log("componentDidMount <App />");
+    setTimeout(() => {
+      console.log("Simulating incoming message");
+      // Add a new message to the list of messages in the data store
+      const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
+      const messages = this.state.messages.concat(newMessage)
+      // Update the state of the app component.
+      // Calling setState will trigger a call to render() in App and all child components.
+      this.setState({messages: messages})
+    }, 3000);
+  }
+
+  handleSubmit(e) {
+    e.stopPropagation()
+
+    if (e.key === 'Enter') {
+
+      let uName;
+
+      if (!this.state.currentUser.name) {
+        uName = "Raccoon"
+      } else {
+        uName = this.state.currentUser.name
+      }
+
+      const newMsg = {
+        username: this.state.currentUser.name,
+        content: this.state.text,
+        id: Date.now()
+      }
+
+      const messages = this.state.messages.concat(newMsg)
+      this.setState({messages: messages, text: ""})
+      e.target.value = ""
+    }
+  }
+
+  handleTyping(e) {
+    this.setState({text: e.target.value});
   }
 
   render() {
@@ -34,7 +78,7 @@ class App extends Component {
 
         <main className="messages">
           <MessageList messages={this.state.messages}/>
-          <ChatBar user={this.state.currentUser}/>
+          <ChatBar user={this.state.currentUser} handleSubmit={this.handleSubmit} handleTyping={this.handleTyping}/>
         </main>
       </div>
     );
