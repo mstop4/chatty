@@ -3,10 +3,15 @@ import Message from './Message.jsx'
 
 class MessageList extends Component {
   render() {
-    console.log("Rendering ChatBar")
+    console.log("Rendering Message List")
+
+    const msgList = this.props.messages.map((msg) =>
+      <Message user={msg.username} content={msg.content}/>
+    )
+
     return (
-      <div className="message system">
-        <Message/>
+      <div className="message-list">
+        {msgList}
       </div>
     );
   }
