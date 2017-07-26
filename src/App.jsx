@@ -11,19 +11,7 @@ class App extends Component {
     this.socket = new WebSocket("ws://0.0.0.0:3003")
     this.state = {
       currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
-      messages: [
-        {
-          id: 1,
-          username: "Bob",
-          content: "Has anyone seen my marbles?",
-        },
-
-        {
-          id: 2,
-          username: "Anonymous",
-          content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
-        }
-      ]
+      messages: []
     }
     this.handleTyping = this.handleTyping.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -37,7 +25,6 @@ class App extends Component {
     //   const newMsg = {
     //     username: bots[rnd] + "bot",
     //     content: bots[rnd],
-    //     id: Date.now()
     //   }
 
     //   const messages = this.state.messages.concat(newMsg)
@@ -47,12 +34,25 @@ class App extends Component {
     // connect to server
 
     this.socket.onopen = function (event) {
-      this.send(JSON.stringify({username: "Raccoonbot", content: "Connected to server!"}))
+      this.socket.send(JSON.stringify({username: "Raccoonbot", content: "Connected to server!"}))
     }
 
-    // this.socket.onmessage = function (data) {
-    //   console.log(data);
-    // }
+    this.socket.onmessage = function (event) {
+
+      let inMsg = JSON.parse(event.data)
+
+      const newMsg = {
+        username: inMsg.username,
+        content: inMsg.content,
+        id: inMsg.id
+      }
+
+      const messages = this.state.messages.concat(newMsg);
+      this.setState({messages: messages})
+    }
+
+    this.socket.onopen = this.socket.onopen.bind(this);
+    this.socket.onmessage = this.socket.onmessage.bind(this);
   }
 
   handleSubmit(e) {
@@ -76,6 +76,7 @@ class App extends Component {
 
       const messages = this.state.messages.concat(newMsg)
       this.setState({messages: messages, text: ""})
+      e.target.value = ""
 
       this.socket.send(JSON.stringify(newMsg))
     }
