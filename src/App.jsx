@@ -47,12 +47,12 @@ class App extends Component {
     // connect to server
 
     this.socket.onopen = function (event) {
-      this.send("Connected to server")
+      this.send(JSON.stringify({username: "Raccoonbot", content: "Connected to server!"}))
     }
 
-    this.socket.onmessage = function (data) {
-      console.log(data);
-    }
+    // this.socket.onmessage = function (data) {
+    //   console.log(data);
+    // }
   }
 
   handleSubmit(e) {
@@ -69,13 +69,15 @@ class App extends Component {
       }
 
       const newMsg = {
-        username: username,
-        content: content,
+        username: uName,
+        content: this.state.text,
         id: Date.now()
       }
 
       const messages = this.state.messages.concat(newMsg)
       this.setState({messages: messages, text: ""})
+
+      this.socket.send(JSON.stringify(newMsg))
     }
   }
 
