@@ -10,10 +10,11 @@ class App extends Component {
     super(props);
     this.socket = new WebSocket("ws://0.0.0.0:3003")
     this.state = {
-      currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      name: "Bob", // optional. if currentUser is not defined, it means the user is Anonymous
       messages: []
     }
-    this.handleTyping = this.handleTyping.bind(this);
+    this.handleTypingName = this.handleTypingName.bind(this);
+    this.handleTypingMessage = this.handleTypingMessage.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -62,10 +63,10 @@ class App extends Component {
 
       let uName;
 
-      if (!this.state.currentUser.name) {
+      if (!this.state.name) {
         uName = "Raccoon"
       } else {
-        uName = this.state.currentUser.name
+        uName = this.state.name
       }
 
       const newMsg = {
@@ -82,7 +83,11 @@ class App extends Component {
     }
   }
 
-  handleTyping(e) {
+  handleTypingName(e) {
+    this.setState({name: e.target.value});
+  }
+
+  handleTypingMessage(e) {
     this.setState({text: e.target.value});
   }
 
@@ -96,7 +101,8 @@ class App extends Component {
 
         <main className="messages">
           <MessageList messages={this.state.messages}/>
-          <ChatBar user={this.state.currentUser} handleSubmit={this.handleSubmit} handleTyping={this.handleTyping}/>
+          <ChatBar user={this.state.name} handleSubmit={this.handleSubmit}
+                   handleTypingName={this.handleTypingName} handleTypingMessage={this.handleTypingMessage}/>
         </main>
       </div>
     );
