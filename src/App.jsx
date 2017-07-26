@@ -2,10 +2,13 @@ import React, {Component} from 'react'
 import ChatBar from './ChatBar.jsx'
 import MessageList from './MessageList.jsx'
 
+const bots = ['pairs', 'john', 'slack', 'raccoon', 'dog', 'cat']
+
 class App extends Component {
 
   constructor(props) {
     super(props);
+    this.socket = new WebSocket("ws://0.0.0.0:3003")
     this.state = {
       currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [
@@ -28,15 +31,28 @@ class App extends Component {
 
   componentDidMount() {
     console.log("componentDidMount <App />");
-    setTimeout(() => {
-      console.log("Simulating incoming message");
-      // Add a new message to the list of messages in the data store
-      const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
-      const messages = this.state.messages.concat(newMessage)
-      // Update the state of the app component.
-      // Calling setState will trigger a call to render() in App and all child components.
-      this.setState({messages: messages})
-    }, 3000);
+
+    // setInterval(()=> {
+    //   let rnd = Math.floor(Math.random() * (bots.length))
+    //   const newMsg = {
+    //     username: bots[rnd] + "bot",
+    //     content: bots[rnd],
+    //     id: Date.now()
+    //   }
+
+    //   const messages = this.state.messages.concat(newMsg)
+    //   this.setState({messages: messages, text: ""})
+    // }, 3000)
+
+    // connect to server
+
+    this.socket.onopen = function (event) {
+      this.send("Connected to server")
+    }
+
+    this.socket.onmessage = function (data) {
+      console.log(data);
+    }
   }
 
   handleSubmit(e) {
@@ -53,14 +69,13 @@ class App extends Component {
       }
 
       const newMsg = {
-        username: this.state.currentUser.name,
-        content: this.state.text,
+        username: username,
+        content: content,
         id: Date.now()
       }
 
       const messages = this.state.messages.concat(newMsg)
       this.setState({messages: messages, text: ""})
-      e.target.value = ""
     }
   }
 
