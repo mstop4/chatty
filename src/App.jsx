@@ -10,12 +10,14 @@ class App extends Component {
     super(props);
     this.socket = new WebSocket("ws://0.0.0.0:3003")
     this.state = {
+      postingAs: "Bob",
       name: "Bob", // optional. if currentUser is not defined, it means the user is Anonymous
       messages: []
     }
-    this.handleTypingName = this.handleTypingName.bind(this);
-    this.handleTypingMessage = this.handleTypingMessage.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleTypingName = this.handleTypingName.bind(this)
+    this.handleTypingMessage = this.handleTypingMessage.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleNameChange = this.handleNameChange.bind(this)
   }
 
   componentDidMount() {
@@ -41,11 +43,26 @@ class App extends Component {
     this.socket.onmessage = function (event) {
 
       let inMsg = JSON.parse(event.data)
+      let newMsg;
 
-      const newMsg = {
-        username: inMsg.username,
-        content: inMsg.content,
-        id: inMsg.id
+      switch (inMsg.type) {
+
+        case "inMessage":
+          newMsg = {
+            username: inMsg.username,
+            content: inMsg.content,
+            id: inMsg.id,
+            type: 'message'
+          }
+          break;
+
+        case "inNotification":
+          newMsg = {
+            username: "Note",
+            content: `${inMsg.oldName} has changed their name to ${inMsg.newName}`,
+            id: inMsg.id,
+            type: 'notification'
+          }
       }
 
       const messages = this.state.messages.concat(newMsg);
@@ -54,6 +71,22 @@ class App extends Component {
 
     this.socket.onopen = this.socket.onopen.bind(this);
     this.socket.onmessage = this.socket.onmessage.bind(this);
+  }
+
+  handleNameChange(e) {
+    e.stopPropagation()
+
+    if (e.key === 'Enter') {
+
+      const newMsg = {
+        oldName: this.state.postingAs,
+        newName: this.state.name,
+        type: "outNotification"
+      }
+
+      this.socket.send(JSON.stringify(newMsg))
+      this.state.postingAs = this.state.name
+    }
   }
 
   handleSubmit(e) {
@@ -72,11 +105,9 @@ class App extends Component {
       const newMsg = {
         username: uName,
         content: this.state.text,
-        id: Date.now()
+        type: "outMessage"
       }
 
-      const messages = this.state.messages.concat(newMsg)
-      this.setState({messages: messages, text: ""})
       e.target.value = ""
 
       this.socket.send(JSON.stringify(newMsg))
@@ -101,7 +132,7 @@ class App extends Component {
 
         <main className="messages">
           <MessageList messages={this.state.messages}/>
-          <ChatBar user={this.state.name} handleSubmit={this.handleSubmit}
+          <ChatBar user={this.state.name} handleSubmit={this.handleSubmit} handleNameChange={this.handleNameChange}
                    handleTypingName={this.handleTypingName} handleTypingMessage={this.handleTypingMessage}/>
         </main>
       </div>
