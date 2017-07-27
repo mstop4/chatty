@@ -9,10 +9,12 @@ class App extends Component {
     this.socket = new WebSocket("ws://0.0.0.0:3003")
     this.state = {
       currentUser: {
+        id: 0,
         postingAs: "Bob",
-        name: "Bob", // optional. if currentUser is not defined, it means the user is Anonymous
+        name: "Bob" // optional. if currentUser is not defined, it means the user is Anonymous
       },
       messages: [],
+      users: [],
       userCount: 0
     }
     this.handleTypingName = this.handleTypingName.bind(this)
@@ -33,8 +35,9 @@ class App extends Component {
     this.socket.onmessage = function (event) {
 
       let inMsg = JSON.parse(event.data)
-      let newMsg;
-      let messages;
+      let newMsg
+      let messages
+      let newUsersList
 
       switch (inMsg.type) {
 
@@ -43,6 +46,7 @@ class App extends Component {
             username: inMsg.username,
             content: inMsg.content,
             id: inMsg.id,
+            userID: inMsg.userID,
             type: 'message'
           }
 
@@ -62,9 +66,25 @@ class App extends Component {
           this.setState({messages: messages})
           break
 
-        case "inUserUpdate":
-          this.setState({userCount: inMsg.value})
-          //this.render()
+        case "inSetup":
+          let newCurUser = Object.assign({}, this.state.currentUser)
+          newCurUser.id = inMsg.id
+          this.setState({currentUser: newCurUser})
+          this.setState({users: inMsg.clientList})
+          break
+
+        case "inConnect":
+          newUsersList = this.state.users.slice()
+          newUsersList.push(inMsg.user)
+          this.setState({users: newUsersList})
+          this.setState({userCount: inMsg.numUsers})
+          break
+
+        case "inDisconnect":
+          newUsersList = this.state.users
+          delete newUsersList.users[inMsg.user.id]
+          this.setState({users: newUsersList})
+          this.setState({userCount: inMsg.numUsers})
       }
     }
 
@@ -106,6 +126,7 @@ class App extends Component {
 
       const newMsg = {
         username: uName,
+        userID: this.state.currentUser.id,
         content: this.state.text,
         type: "outMessage"
       }
@@ -136,7 +157,7 @@ class App extends Component {
         </nav>
 
         <main className="messages">
-          <MessageList messages={this.state.messages}/>
+          <MessageList messages={this.state.messages} users={this.state.users}/>
           <ChatBar user={this.state.currentUser.name} handleSubmit={this.handleSubmit} handleNameChange={this.handleNameChange}
                    handleTypingName={this.handleTypingName} handleTypingMessage={this.handleTypingMessage}/>
         </main>
