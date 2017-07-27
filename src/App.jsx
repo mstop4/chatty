@@ -81,7 +81,6 @@ class App extends Component {
           break
 
         case "inDisconnect":
-          debugger
           newUsersList = Object.assign({}, this.state.users)
           delete newUsersList[inMsg.user.id]
           this.setState({users: newUsersList})

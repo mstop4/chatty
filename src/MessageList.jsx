@@ -7,9 +7,9 @@ class MessageList extends Component {
 
     const msgList = this.props.messages.map((msg) => {
 
-      for (var i=0; i<this.props.users.length; i++) {
-        if (this.props.users[i].id === msg.userID) {
-          return <Message user={msg.username} userColour={this.props.users[i].color} content={msg.content} key={msg.id} type={msg.type}/>
+      for (var user in this.props.users) {
+        if (this.props.users[user].id === msg.userID) {
+          return <Message user={msg.username} userColour={this.props.users[user].color} content={msg.content} key={msg.id} type={msg.type}/>
         }
       }
 
