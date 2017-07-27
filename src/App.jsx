@@ -14,7 +14,7 @@ class App extends Component {
         name: "Bob" // optional. if currentUser is not defined, it means the user is Anonymous
       },
       messages: [],
-      users: [],
+      users: {},
       userCount: 0
     }
     this.handleTypingName = this.handleTypingName.bind(this)
@@ -74,15 +74,16 @@ class App extends Component {
           break
 
         case "inConnect":
-          newUsersList = this.state.users.slice()
-          newUsersList.push(inMsg.user)
+          newUsersList = Object.assign({}, this.state.users)
+          newUsersList[inMsg.user.id] = inMsg.user
           this.setState({users: newUsersList})
           this.setState({userCount: inMsg.numUsers})
           break
 
         case "inDisconnect":
-          newUsersList = this.state.users
-          delete newUsersList.users[inMsg.user.id]
+          debugger
+          newUsersList = Object.assign({}, this.state.users)
+          delete newUsersList[inMsg.user.id]
           this.setState({users: newUsersList})
           this.setState({userCount: inMsg.numUsers})
       }

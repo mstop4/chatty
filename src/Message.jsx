@@ -14,8 +14,6 @@ class Message extends Component {
       )
     } else {
 
-
-      debugger;
       let nameStyle = {color: this.props.userColour}
 
       return (
@@ -26,24 +24,6 @@ class Message extends Component {
       )
     }
   }
-
-  // render() {
-  //   console.log("Rendering Message")
-  //   let classes
-
-  //   if (this.props.type === 'notification') {
-  //     classes = 'className="message notification"'
-  //   } else {
-  //     classes = 'className="message"'
-  //   }
-
-  //   return (
-  //     <div {classes} key={this.props.id}>
-  //       <span className="message-username">{this.props.user}</span>
-  //       <span className="message-content">{this.props.content}</span>
-  //     </div>
-  //   )
-  // }
 }
 
 export default Message
