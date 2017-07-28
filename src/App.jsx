@@ -72,6 +72,10 @@ class App extends Component {
           delete newUsersList[inMsg.user.id]
           this.setState({users: newUsersList})
           this.setState({userCount: inMsg.numUsers})
+          break;
+
+        default:
+          console.log("Error: Unknown message type.")
       }
     }
 
@@ -98,7 +102,7 @@ class App extends Component {
       // the content key is there to prevent the server from freaking out when it tries to find an image link
       const newMsg = {
         oldName: this.state.currentUser.postingAs,
-        newName: this.state.currentUser.name,
+        newName: this.state.currentUser.name ? this.state.currentUser.name : 'Anonymous',
         content: '',
         type: "outNotification"
       }
@@ -116,13 +120,7 @@ class App extends Component {
 
     if (e.key === 'Enter' && this.state.text) {
 
-      let uName;
-
-      if (!this.state.currentUser.postingAs) {
-        uName = "Raccoon"
-      } else {
-        uName = this.state.currentUser.postingAs
-      }
+      let uName = this.state.currentUser.postingAs ? this.state.currentUser.postingAs : 'Anonymous'
 
       // the id (null) and contentType ('text') keys are ignored by the server
       const newMsg = this.buildMessage(null, 'outMessage', this.state.currentUser.id, uName, 'text', this.state.text)
@@ -146,8 +144,8 @@ class App extends Component {
     return (
       <div>
         <nav className="navbar">
-          <a href="/" className="navbar-brand">Raccoon Chat</a>
-          <span className="logoBox"><img className="raccoon" src="/build/raccoon.jpg"/></span>
+          <a href="/" className="navbar-brand">Chatty</a>
+          <span className="logoBox"></span>
           <span className="userCounter">{this.state.userCount} Users online</span>
         </nav>
 
