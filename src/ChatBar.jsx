@@ -3,7 +3,6 @@ import React, {Component} from 'react'
 class ChatBar extends Component {
 
   render() {
-    console.log("Rendering ChatBar")
 
     return (
       <footer className="chatbar">

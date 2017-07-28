@@ -24,7 +24,6 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log("componentDidMount <App />");
 
     // connect to server
 
@@ -45,6 +44,7 @@ class App extends Component {
           newMsg = {
             username: inMsg.username,
             content: inMsg.content,
+            contentType: inMsg.contentType,
             id: inMsg.id,
             userID: inMsg.userID,
             type: 'message'
@@ -58,6 +58,7 @@ class App extends Component {
           newMsg = {
             username: "Note",
             content: `${inMsg.oldName} has changed their name to ${inMsg.newName}`,
+            contentType: inMsg.contentType,
             id: inMsg.id,
             type: 'notification'
           }
