@@ -41,28 +41,14 @@ class App extends Component {
       switch (inMsg.type) {
 
         case "inMessage":
-          newMsg = {
-            username: inMsg.username,
-            content: inMsg.content,
-            contentType: inMsg.contentType,
-            id: inMsg.id,
-            userID: inMsg.userID,
-            type: 'message'
-          }
-
+          newMsg = this.buildMessage(inMsg.id, 'message', inMsg.userID, inMsg.username, inMsg.contentType, inMsg.content)
           messages = this.state.messages.concat(newMsg);
           this.setState({messages: messages})
           break
 
         case "inNotification":
-          newMsg = {
-            username: "Note",
-            content: `${inMsg.oldName} has changed their name to ${inMsg.newName}`,
-            contentType: inMsg.contentType,
-            id: inMsg.id,
-            type: 'notification'
-          }
-
+          let content = `${inMsg.oldName} has changed their name to ${inMsg.newName}`
+          newMsg = this.buildMessage(inMsg.id, 'notification', inMsg.userID, 'Note', inMsg.contentType, content)
           messages = this.state.messages.concat(newMsg);
           this.setState({messages: messages})
           break
@@ -93,14 +79,27 @@ class App extends Component {
     this.socket.onmessage = this.socket.onmessage.bind(this);
   }
 
+  buildMessage(id, type, userID, username, contentType, content) {
+    return {
+      id: id,
+      type: type,
+      userID: userID,
+      username: username,
+      contentType: contentType,
+      content: content
+    }
+  }
+
   handleNameChange(e) {
     e.stopPropagation()
 
     if (e.key === 'Enter') {
 
+      // the content key is there to prevent the server from freaking out when it tries to find an image link
       const newMsg = {
         oldName: this.state.currentUser.postingAs,
         newName: this.state.currentUser.name,
+        content: '',
         type: "outNotification"
       }
 
@@ -115,7 +114,7 @@ class App extends Component {
   handleSubmit(e) {
     e.stopPropagation()
 
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && this.state.text) {
 
       let uName;
 
@@ -125,12 +124,8 @@ class App extends Component {
         uName = this.state.currentUser.postingAs
       }
 
-      const newMsg = {
-        username: uName,
-        userID: this.state.currentUser.id,
-        content: this.state.text,
-        type: "outMessage"
-      }
+      // the id (null) and contentType ('text') keys are ignored by the server
+      const newMsg = this.buildMessage(null, 'outMessage', this.state.currentUser.id, uName, 'text', this.state.text)
 
       e.target.value = ""
       this.setState({text: ""})
@@ -139,8 +134,7 @@ class App extends Component {
   }
 
   handleTypingName(e) {
-    let newCurUser = Object.assign({}, this.state.currentUser)
-    newCurUser.name = e.target.value;
+    let newCurUser = Object.assign({}, this.state.currentUser, {name: e.target.value})
     this.setState({currentUser: newCurUser});
   }
 
