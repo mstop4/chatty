@@ -2,16 +2,19 @@ import React, {Component} from 'react'
 import ChatBar from './ChatBar.jsx'
 import MessageList from './MessageList.jsx'
 
+const HOST = process.env.SERVER_HOST
+const PORT = process.env.SERVER_PORT
+
 class App extends Component {
 
   constructor(props) {
     super(props)
-    this.socket = new WebSocket("ws://0.0.0.0:3003")
+    this.socket = new WebSocket(`ws://${HOST}:${PORT}`)
     this.state = {
       currentUser: {
         id: 0,
-        postingAs: "Bob",
-        name: "Bob" // optional. if currentUser is not defined, it means the user is Anonymous
+        postingAs: "Bob", // The name used in posts by this client
+        name: "Bob" // The current contents of the username text area
       },
       messages: [],
       validMessage: true,

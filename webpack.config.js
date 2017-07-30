@@ -1,3 +1,4 @@
+var DotenvPlugin = require('webpack-dotenv-plugin');
 var path = require('path');
 var webpack = require('webpack');
 
@@ -12,6 +13,12 @@ module.exports = {
     filename: 'bundle.js',
     publicPath: '/build/'
   },
+  plugins: [
+    new DotenvPlugin({
+      sample: './.env.example',
+      path: './.env'
+    })
+  ],
   module: {
     rules: [
       {
