@@ -1,6 +1,6 @@
 # Chatty App Client
 
-!["Screenshot"]()
+!["Screenshot"](https://github.com/mstop4/chatty-client/blob/master/doc/chatty_screen.png)
 
 The client app server for **[Chatty App Server](https://github.com/mstop4/chatty-server)**.
 
