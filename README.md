@@ -2,7 +2,7 @@
 
 !["Screenshot"](https://github.com/mstop4/chatty-client/blob/master/doc/chatty_screen.png)
 
-The client app server for **[Chatty App Server](https://github.com/mstop4/chatty-server)**.
+Real-time web chat app. The client app server for **[Chatty App Server](https://github.com/mstop4/chatty-server)**.
 
 Allows users to send and receive text messages and images in real-time using any web browser.
 
