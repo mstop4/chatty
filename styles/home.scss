@@ -9,7 +9,7 @@
 }
 
 body {
-  background: #e0f0ff;
+  background: #f0f8ff;
   color: black;
   font-family: 'Open Sans', sans-serif;
   font-size: 14px;
@@ -76,12 +76,11 @@ body {
 }
 
 .notification {
-  color: LimeGreen;
+  color: black;
 }
 
 .navbar {
   @include glass;
-  border-bottom: 1px solid black;
   height: 60px;
   left: 0;
   padding: 0 10px;
@@ -93,7 +92,7 @@ body {
 }
 
 .navbar-brand {
-  color: inherit;
+  color: white;
   display: block;
   float: left;
   font-weight: 700;
@@ -109,6 +108,7 @@ body {
 }
 
 .userCounter {
+  color: white;
   display: flex;
   align-items: center;
 }

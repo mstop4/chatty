@@ -14,6 +14,7 @@ class App extends Component {
         name: "Bob" // optional. if currentUser is not defined, it means the user is Anonymous
       },
       messages: [],
+      validMessage: true,
       users: {},
       userCount: 0
     }
@@ -114,16 +115,21 @@ class App extends Component {
   handleSubmit(e) {
     e.stopPropagation()
 
-    if (e.key === 'Enter' && this.state.text) {
+    if (e.key === 'Enter') {
+      if (this.state.text) {
+        let uName = this.state.currentUser.postingAs ? this.state.currentUser.postingAs : 'Anonymous'
 
-      let uName = this.state.currentUser.postingAs ? this.state.currentUser.postingAs : 'Anonymous'
+        // the id (null) and contentType ('text') keys are ignored by the server
+        const newMsg = this.buildMessage(null, 'outMessage', this.state.currentUser.id, uName, 'text', this.state.text)
 
-      // the id (null) and contentType ('text') keys are ignored by the server
-      const newMsg = this.buildMessage(null, 'outMessage', this.state.currentUser.id, uName, 'text', this.state.text)
+        e.target.value = ""
+        this.setState({text: ""})
+        this.socket.send(JSON.stringify(newMsg))
 
-      e.target.value = ""
-      this.setState({text: ""})
-      this.socket.send(JSON.stringify(newMsg))
+        this.setState({validMessage: true})
+      } else {
+        this.setState({validMessage: false})
+      }
     }
   }
 
@@ -148,7 +154,8 @@ class App extends Component {
         <main className="messages">
           <MessageList messages={this.state.messages} users={this.state.users}/>
           <ChatBar user={this.state.currentUser.name} handleSubmit={this.handleSubmit} handleNameChange={this.handleNameChange}
-                   handleTypingName={this.handleTypingName} handleTypingMessage={this.handleTypingMessage}/>
+                   handleTypingName={this.handleTypingName} handleTypingMessage={this.handleTypingMessage}
+                   validMessage={this.state.validMessage}/>
         </main>
       </div>
     )

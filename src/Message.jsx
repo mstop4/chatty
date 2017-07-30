@@ -8,6 +8,7 @@ class Message extends Component {
     let divClass = ""
     let msgContSpan
 
+    // Determine message and content type
     if (this.props.type !== 'notification') {
       divClass = "message"
       nameStyle = {color: this.props.userColour}
@@ -22,8 +23,8 @@ class Message extends Component {
     }
 
     return (
-      <div className={divClass} style={nameStyle}>
-        <span className="message-username">{this.props.user}</span>
+      <div className={divClass}>
+        <span className="message-username" style={nameStyle}>{this.props.user}</span>
         {msgContSpan}
       </div>
     )
