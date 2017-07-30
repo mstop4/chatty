@@ -1,7 +1,7 @@
 {
   "name": "chatty-app",
   "version": "1.0.0",
-  "description": "Blah blah blah",
+  "description": "Realtime chat web app client",
   "scripts": {
     "lint": "eslint --ext .jsx,.js src",
     "start": "node server.js"
@@ -11,13 +11,7 @@
     "url": "https://github.com/mstop4/chatty.git"
   },
   "keywords": [
-    "react",
-    "reactjs",
-    "boilerplate",
-    "reload",
-    "live",
-    "edit",
-    "webpack"
+    "chatty"
   ],
   "author": "Jonathan Lam <mstop4@gmail.com>",
   "license": "MIT",

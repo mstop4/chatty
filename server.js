@@ -1,6 +1,9 @@
-var webpack = require('webpack');
-var WebpackDevServer = require('webpack-dev-server');
-var config = require('./webpack.config');
+var webpack = require('webpack')
+var WebpackDevServer = require('webpack-dev-server')
+var config = require('./webpack.config')
+
+var HOST = '0.0.0.0'
+var PORT = 3002
 
 new WebpackDevServer(webpack(config), {
     publicPath: config.output.publicPath,
@@ -10,10 +13,10 @@ new WebpackDevServer(webpack(config), {
       ignored: /node_modules/
     }
   })
-  .listen(3002, '0.0.0.0', function (err, result) {
+  .listen(PORT, HOST, function (err, result) {
     if (err) {
-      console.log(err);
+      console.log(err)
     }
 
-    console.log('Running at http://0.0.0.0:3002');
-  });
+    console.log(`Running at http://${HOST}:${PORT}`)
+  })
