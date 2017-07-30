@@ -1,4 +1,4 @@
-# Chatty App Client
+# Chatty App Client 💬
 
 !["Screenshot"](https://github.com/mstop4/chatty-client/blob/master/doc/chatty_screen.png)
 
