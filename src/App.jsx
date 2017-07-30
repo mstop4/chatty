@@ -5,7 +5,7 @@ import MessageList from './MessageList.jsx'
 class App extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.socket = new WebSocket("ws://0.0.0.0:3003")
     this.state = {
       currentUser: {
@@ -17,6 +17,7 @@ class App extends Component {
       users: {},
       userCount: 0
     }
+
     this.handleTypingName = this.handleTypingName.bind(this)
     this.handleTypingMessage = this.handleTypingMessage.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -26,10 +27,6 @@ class App extends Component {
   componentDidMount() {
 
     // connect to server
-
-    this.socket.onopen = function (event) {
-      //this.socket.send(JSON.stringify({username: "Raccoonbot", content: "Connected to server!"}))
-    }
 
     this.socket.onmessage = function (event) {
 
@@ -42,14 +39,14 @@ class App extends Component {
 
         case "inMessage":
           newMsg = this.buildMessage(inMsg.id, 'message', inMsg.userID, inMsg.username, inMsg.contentType, inMsg.content)
-          messages = this.state.messages.concat(newMsg);
+          messages = this.state.messages.concat(newMsg)
           this.setState({messages: messages})
           break
 
         case "inNotification":
           let content = `${inMsg.oldName} has changed their name to ${inMsg.newName}`
           newMsg = this.buildMessage(inMsg.id, 'notification', inMsg.userID, 'Note', inMsg.contentType, content)
-          messages = this.state.messages.concat(newMsg);
+          messages = this.state.messages.concat(newMsg)
           this.setState({messages: messages})
           break
 
@@ -72,11 +69,14 @@ class App extends Component {
           delete newUsersList[inMsg.user.id]
           this.setState({users: newUsersList})
           this.setState({userCount: inMsg.numUsers})
+          break
+
+        default:
+          console.log("Error: Unknown message type.")
       }
     }
 
-    this.socket.onopen = this.socket.onopen.bind(this);
-    this.socket.onmessage = this.socket.onmessage.bind(this);
+    this.socket.onmessage = this.socket.onmessage.bind(this)
   }
 
   buildMessage(id, type, userID, username, contentType, content) {
@@ -98,7 +98,7 @@ class App extends Component {
       // the content key is there to prevent the server from freaking out when it tries to find an image link
       const newMsg = {
         oldName: this.state.currentUser.postingAs,
-        newName: this.state.currentUser.name,
+        newName: this.state.currentUser.name ? this.state.currentUser.name : 'Anonymous',
         content: '',
         type: "outNotification"
       }
@@ -106,8 +106,8 @@ class App extends Component {
       this.socket.send(JSON.stringify(newMsg))
 
       let newCurUser = Object.assign({}, this.state.currentUser)
-      newCurUser.postingAs = this.state.currentUser.name;
-      this.setState({currentUser: newCurUser});
+      newCurUser.postingAs = this.state.currentUser.name
+      this.setState({currentUser: newCurUser})
     }
   }
 
@@ -116,13 +116,7 @@ class App extends Component {
 
     if (e.key === 'Enter' && this.state.text) {
 
-      let uName;
-
-      if (!this.state.currentUser.postingAs) {
-        uName = "Raccoon"
-      } else {
-        uName = this.state.currentUser.postingAs
-      }
+      let uName = this.state.currentUser.postingAs ? this.state.currentUser.postingAs : 'Anonymous'
 
       // the id (null) and contentType ('text') keys are ignored by the server
       const newMsg = this.buildMessage(null, 'outMessage', this.state.currentUser.id, uName, 'text', this.state.text)
@@ -135,19 +129,19 @@ class App extends Component {
 
   handleTypingName(e) {
     let newCurUser = Object.assign({}, this.state.currentUser, {name: e.target.value})
-    this.setState({currentUser: newCurUser});
+    this.setState({currentUser: newCurUser})
   }
 
   handleTypingMessage(e) {
-    this.setState({text: e.target.value});
+    this.setState({text: e.target.value})
   }
 
   render() {
     return (
       <div>
         <nav className="navbar">
-          <a href="/" className="navbar-brand">Raccoon Chat</a>
-          <span className="logoBox"><img className="raccoon" src="/build/raccoon.jpg"/></span>
+          <a href="/" className="navbar-brand">Chatty</a>
+          <span className="logoBox"></span>
           <span className="userCounter">{this.state.userCount} Users online</span>
         </nav>
 
@@ -157,9 +151,8 @@ class App extends Component {
                    handleTypingName={this.handleTypingName} handleTypingMessage={this.handleTypingMessage}/>
         </main>
       </div>
-    );
+    )
   }
-
 }
 
 export default App
