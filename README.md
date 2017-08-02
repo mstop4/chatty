@@ -4,7 +4,7 @@
 
 Real-time web chat app. The client app server for **[Chatty App Server](https://github.com/mstop4/chatty-server)**.
 
-Allows users to send and receive text messages and images in real-time using any web browser.
+Allows users to send and receive text messages, images, Youtube videos in real-time using any web browser.
 
 ## Getting Started
 
@@ -14,6 +14,11 @@ Allows users to send and receive text messages and images in real-time using any
 4. Make a copy of  `.env.example` to `.env` and change the `CLIENT_HOST` address or `CLIENT_PORT` number as you see fit. Change the `SERVER_HOST` and `SERVER_PORT` so that it matches the corresponding settings in the Server's `.env` file.
 4. Run `npm start` to start the app server.
 5. Get yourself and your friends to go to the `CLIENT` host address and port specified above in your browsers and start chatting.
+
+## Chat Commands
+
+* /youtube <video-id> - Embed a Youtube video
+* <any URL that ends with .jpg/.jpeg/.gif/.png/.bmp> - Embed an image
 
 ## Dependencies
 
