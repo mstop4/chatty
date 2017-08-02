@@ -16,7 +16,7 @@ class Message extends Component {
       divClass = "message notification"
     }
 
-    if (this.props.contentType === 'image') {
+    if (this.props.contentType === 'media') {
       msgContSpan = <span className="message-content" dangerouslySetInnerHTML={{__html: this.props.content}}></span>
     } else {
       msgContSpan = <span className="message-content">{this.props.content}</span>
