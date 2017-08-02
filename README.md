@@ -17,8 +17,8 @@ Allows users to send and receive text messages, images, Youtube videos in real-t
 
 ## Chat Commands
 
-* /youtube <video-id> - Embed a Youtube video
-* <any URL that ends with .jpg/.jpeg/.gif/.png/.bmp> - Embed an image
+* /youtube [video-id] - Embed a Youtube video
+* [any URL that ends with .jpg/.jpeg/.gif/.png/.bmp] - Embed an image
 
 ## Dependencies
 
