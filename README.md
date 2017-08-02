@@ -4,7 +4,7 @@
 
 Real-time web chat app. The client app server for **[Chatty App Server](https://github.com/mstop4/chatty-server)**.
 
-Allows users to send and receive text messages, images, Youtube videos in real-time using any web browser.
+Allows users to send and receive text messages, images, and Youtube videos in real-time using any web browser.
 
 ## Getting Started
 
