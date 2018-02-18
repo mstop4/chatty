@@ -81,6 +81,8 @@ class App extends Component {
     }
 
     this.socket.onmessage = this.socket.onmessage.bind(this)
+
+    window.addEventListener('beforeunload', () => { this.socket.close() })
   }
 
   buildMessage(id, type, userID, username, contentType, content) {
